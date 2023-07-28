@@ -7,33 +7,27 @@ from .models import User, Profile
 from .serializers import UserLoginSerializer, UserJoinSerializer, ProfileSerializer, UserSerializer
 # Create your views here.
 
+### Login 수정 중
+class Login(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = User.objects.filter(email=email).first()
+        serializer = UserLoginSerializer(user)
 
-class Login(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserLoginSerializer
-    # def post(self, request):
-    #     email = request.data.get('email')
-    #     password = request.data.get('password')
-    #     user = User.objects.filter(email=email).first()
-    #     serializer = UserLoginSerializer(user)
-
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return Response(serializer.data)
         
-        # if email is None:
-        #     return Response({'msg' : '이메일이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        if email is None:
+            return Response({'msg' : '이메일이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # if not check_password(password, user.password):
-        #     return Response({'msg' : '비밀번호가 틀렸습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not check_password(password, user.password):
+            return Response({'msg' : '비밀번호가 틀렸습니다.'}, status=status.HTTP_400_BAD_REQUEST)
         
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-# class Login(generics.)
-
-#     if 
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
