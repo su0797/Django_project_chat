@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
+import jwt
+from datetime import datetime, timedelta
+from django.conf import settings
+
 
 # Create your models here.
 '''
@@ -55,7 +59,18 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     
     objects = UserManager()
+    
+    @property
+    def token(self):
+        return self._generate_jwt_token( )
 
+    def _generate_jwt_token(self):
+        dt = datetime.now( ) + timedelta(days=60)
+        token = jwt.encode({
+            'id': self.pk,
+            'exp': dt.utcfromtimestamp(dt.timestamp())
+        }, settings.SECRET_KEY, algorithm='HS256')
+        return token
 
 
 class Profile(models.Model):

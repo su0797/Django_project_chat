@@ -1,32 +1,47 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import check_password
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status, generics
 from .models import User, Profile
 from .serializers import UserLoginSerializer, UserJoinSerializer, ProfileSerializer, UserSerializer
+from .renderers import UserJSONRenderer
 # Create your views here.
 
 ### Login 수정 중
+# class Login(generics.GenericAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserLoginSerializer
+    # def post(self, request):
+    #     email = request.data.post('email')
+    #     password = request.data.post('password')
+    #     user = User.objects.filter(email=email).first()
+    #     serializer = UserLoginSerializer(email = email, password = password)
+
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+        
+        # if email is None:
+        #     return Response({'msg' : '이메일이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # if not check_password(password, user.password):
+        #     return Response({'msg' : '비밀번호가 틀렸습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class Login(APIView):
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = UserLoginSerializer
+
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        user = User.objects.filter(email=email).first()
-        serializer = UserLoginSerializer(user)
-
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return Response(serializer.data)
-        
-        if email is None:
-            return Response({'msg' : '이메일이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not check_password(password, user.password):
-            return Response({'msg' : '비밀번호가 틀렸습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        user = request.data
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 
 class UserList(generics.ListAPIView):
@@ -34,9 +49,22 @@ class UserList(generics.ListAPIView):
     serializer_class = UserSerializer
 
 
-class Join(generics.CreateAPIView):
-    queryset = User.objects.all()
+
+class Join(APIView):
+    # queryset = User.objects.all()
+    permission_classes = (AllowAny,)
     serializer_class = UserJoinSerializer
+    renderer_classes = (UserJSONRenderer,)
+    def post(self, request):
+        user = request.data
+        
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 
 
 ### Profile

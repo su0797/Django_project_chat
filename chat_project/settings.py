@@ -15,6 +15,7 @@ import os
 
 # Auth user
 AUTH_USER_MODEL = 'user.User'
+# AUTH_USER_MODEL = 'authentication.User'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    # 'authentication',
+    'django_extensions',
     'chatbot',
     'user',
 ]
