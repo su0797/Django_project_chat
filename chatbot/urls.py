@@ -5,4 +5,5 @@ app_name = 'chatbot'
 
 urlpatterns = [
 	path('', views.ChatView.as_view(), name='chat'),
+    # path('chatbot/', views.chatbot, name='chatbot'),
 ]
