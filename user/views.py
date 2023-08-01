@@ -7,6 +7,8 @@ from rest_framework import status, generics
 from .models import User, Profile
 from .serializers import UserLoginSerializer, UserJoinSerializer, ProfileSerializer, UserSerializer
 from .renderers import UserJSONRenderer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
 # Create your views here.
 
 ### Login 수정 중
@@ -37,8 +39,8 @@ class Login(APIView):
     serializer_class = UserLoginSerializer
 
     def post(self, request):
-        email = request.data.get('uid')  # 'uid'를 'email'로 수정
-        password = request.data.get('upw')  # 'upw'를 'password'로 수정
+        email = request.data.get('email')  # 'uid'를 'email'로 수정
+        password = request.data.get('password')  # 'upw'를 'password'로 수정
         data = {'email': email, 'password': password}
         serializer = self.serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
@@ -59,7 +61,6 @@ class Join(APIView):
     renderer_classes = (UserJSONRenderer,)
     def post(self, request):
         user = request.data
-        
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -67,6 +68,37 @@ class Join(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+
+
+# class Logout( APIView):
+#     serializer_class = LogoutSerializer
+
+#     def post(self, request):
+#         email = request.data.get('uid')  # 'uid'를 'email'로 수정
+#         password = request.data.get('upw')  # 'upw'를 'password'로 수정
+#         data = {'email': email, 'password': password}
+#         serializer = self.serializer_class(data=data)
+#         serializer.is_valid(raise_exception=True)
+#         response = Response({
+#             "message": "Logout success"
+#             }, status=status.HTTP_202_ACCEPTED)
+#         response.delete_cookie('token')
+
+#         return response
+
+class Logout(APIView):
+    authentication_classes = (SessionAuthentication,)  # 로그아웃에는 세션 인증을 사용
+    permission_classes = (IsAuthenticated,)  # 인증된 사용자만 로그아웃 가능
+
+    def post(self, request):
+        email = request.data.get('uid')  # 'uid'를 'email'로 수정
+        password = request.data.get('upw')  # 'upw'를 'password'로 수정
+        data = {'email': email, 'password': password}
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+        # Django에서 제공하는 로그아웃 메서드 사용
+        request.user.logout()
+        return Response({"detail": "로그아웃되었습니다."}, status=status.HTTP_200_OK)
 
 
 ### Profile

@@ -8,6 +8,7 @@ app_name = 'user'
 urlpatterns = [
     path('join/', views.Join.as_view(), name='join'),
     path('login/', views.Login.as_view(), name='login'),
+    path('logout/', views.Logout.as_view(), name='logout'),
     path('list/', views.UserList.as_view(), name='user-list'),
     # path('api-auth/', include('rest_framework.urls')),
 	path('profile/write/', views.ProfileWrite.as_view(), name='wr-profile'),

@@ -59,6 +59,10 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 
+# class LogoutSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ["email","password"]
 
 
 # class UserJoinSerializer(serializers.ModelSerializer):
