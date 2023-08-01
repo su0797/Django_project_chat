@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    name = serializers.CharField(max_length=255, read_only=True)
+    # name = serializers.CharField(max_length=255, read_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
     last_login = serializers.CharField(max_length=255, read_only=True)
 
@@ -55,7 +55,7 @@ class UserLoginSerializer(serializers.Serializer):
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
         
-        return User
+        return user
 
 
 
