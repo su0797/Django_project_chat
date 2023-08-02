@@ -11,18 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
-# class UserLoginSerializer(serializers.ModelSerializer):
-#     def post(self, validated_data):
-#         user = User.objects.get(
-#             email = validated_data['email'],
-#             password = validated_data['password']
-#         )
-#         return User
-#     class Meta:
-#         model = User
-#         fields = ['email', 'password']
-
-
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     # name = serializers.CharField(max_length=255, read_only=True)
@@ -58,26 +46,6 @@ class UserLoginSerializer(serializers.Serializer):
         return user
 
 
-
-# class LogoutSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ["email","password"]
-
-
-# class UserJoinSerializer(serializers.ModelSerializer):
-#     token = serializers.CharField(max_length=255, read_only=True)
-
-#     def create(self, validated_data):
-#         user = User.objects.create_user(
-#             name = validated_data['name'],
-#             email = validated_data['email'],
-#             password = validated_data['password']
-#         )
-#         return user
-#     class Meta:
-#         model = User
-#         fields = ['name', 'email', 'password', 'token']
 
 class UserJoinSerializer(serializers.ModelSerializer):
     

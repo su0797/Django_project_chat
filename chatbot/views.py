@@ -45,9 +45,4 @@ class ChatView(APIView):
 
         return Response({'error': '입력 내용이 필요합니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
-# def chatbot(request):
-    # 이전 코드 내용을 그대로 유지하고, 마지막에 JsonResponse로 응답을 반환합니다.
-    # 예시로 {"choices": [{"message": {"response": "답변 내용"}}]} 형식으로 응답한다고 가정합니다.
-    # 실제로는 원하는 JSON 응답 형식으로 수정해야 합니다.
-    # return JsonResponse({"choices": [{"message": {"response": "답변 내용"}}]})
 
