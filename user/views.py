@@ -4,6 +4,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status, generics
+from django.contrib.auth import logout as django_logout  # Django의 logout 함수와 충돌을 피하기 위해 이름 변경
+from rest_framework.authtoken.models import Token
 from .models import User, Profile
 from .serializers import UserLoginSerializer, UserJoinSerializer, ProfileSerializer, UserSerializer
 from .renderers import UserJSONRenderer
@@ -25,7 +27,23 @@ class Login(APIView):
         serializer = self.serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+# class Login(APIView):
+#     permission_classes = (AllowAny,)
+#     renderer_classes = (UserJSONRenderer,)
+#     serializer_class = UserLoginSerializer
+
+#     def post(self, request):
+#         email = request.data.get('email')
+#         password = request.data.get('password')
+#         data = {'email': email, 'password': password}
+#         serializer = self.serializer_class(data=data)
+#         serializer.is_valid(raise_exception=True)
+
+#         user = serializer.validated_data['user']
+#         token = Token.objects.get(user=user).key
+
+#         return Response({'user': UserSerializer(user).data, 'token': token}, status=status.HTTP_200_OK)
+
 
 
 class UserList(generics.ListAPIView):
@@ -49,18 +67,44 @@ class Join(APIView):
 
 
 
+# class Logout(APIView):
+#     authentication_classes = (TokenAuthentication,)  # 로그아웃에는 토큰 인증을 사용
+#     permission_classes = (IsAuthenticated,)  # 인증된 사용자만 로그아웃 가능
+
+#     def post(self, request):
+#         email = request.data.get('uid')  # 'uid'를 'email'로 수정
+#         password = request.data.get('upw')  # 'upw'를 'password'로 수정
+#         data = {'email': email, 'password': password}
+#         serializer = self.serializer_class(data=data)
+#         serializer.is_valid(raise_exception=True)
+#         # Django에서 제공하는 로그아웃 메서드 사용
+#         request.user.logout()
+#         return Response({"detail": "로그아웃되었습니다."}, status=status.HTTP_200_OK)
+
+
+# class Logout(APIView):
+#     authentication_classes = (TokenAuthentication,)  # 로그아웃에는 토큰 인증을 사용
+#     permission_classes = (IsAuthenticated,)  # 인증된 사용자만 로그아웃 가능
+
+#     def post(self, request):
+#         # Django에서 제공하는 로그아웃 메서드 사용
+#         request.user.logout()
+#         return Response({"detail": "로그아웃되었습니다."}, status=status.HTTP_200_OK)
 class Logout(APIView):
-    authentication_classes = (TokenAuthentication,)  # 로그아웃에는 토큰 인증을 사용
-    permission_classes = (IsAuthenticated,)  # 인증된 사용자만 로그아웃 가능
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        email = request.data.get('uid')  # 'uid'를 'email'로 수정
-        password = request.data.get('upw')  # 'upw'를 'password'로 수정
-        data = {'email': email, 'password': password}
-        serializer = self.serializer_class(data=data)
-        serializer.is_valid(raise_exception=True)
-        # Django에서 제공하는 로그아웃 메서드 사용
-        request.user.logout()
+        user = request.user  # 현재 로그인한 사용자
+        try:
+            token = Token.objects.get(user=user)  # 해당 사용자의 토큰 가져오기
+            token.delete()  # 토큰 삭제
+        except Token.DoesNotExist:
+            pass
+
+        # Django의 logout 함수 사용
+        django_logout(request)
+
         return Response({"detail": "로그아웃되었습니다."}, status=status.HTTP_200_OK)
 
 

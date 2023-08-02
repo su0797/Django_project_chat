@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import openai
 import os
 from .models import Conversation
+from .serializers import ConversationSerializer  # 추가
+
 
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -12,8 +14,9 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 class ChatView(APIView):
     def get(self, request, *args, **kwargs):
         conversations = request.session.get('conversations', [])
-        return Response({'conversations': conversations}, status=status.HTTP_200_OK)
-
+        serializer = ConversationSerializer(conversations, many=True)  # 추가
+        return Response({'conversations': serializer.data}, status=status.HTTP_200_OK)  # 변경
+    
     def post(self, request, *args, **kwargs):
         prompt = request.data.get('prompt')
         if prompt:
@@ -41,8 +44,7 @@ class ChatView(APIView):
             request.session['conversations'] = session_conversations
             request.session.modified = True
 
-            return Response({'response': response}, status=status.HTTP_201_CREATED)
+            serializer = ConversationSerializer({'prompt': prompt, 'response': response})  # 추가
+            return Response(serializer.data, status=status.HTTP_201_CREATED)  # 변경
 
         return Response({'error': '입력 내용이 필요합니다.'}, status=status.HTTP_400_BAD_REQUEST)
-
-
