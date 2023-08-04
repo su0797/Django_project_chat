@@ -45,31 +45,6 @@ class UserLoginSerializer(serializers.Serializer):
         user.save(update_fields=['last_login'])
         
         return user
-# class UserLoginSerializer(serializers.Serializer):
-#     email = serializers.EmailField()
-#     password = serializers.CharField(max_length=128, write_only=True)
-
-#     def validate(self, data):
-#         email = data.get('email', None)
-#         password = data.get('password', None)
-#         if email is None:
-#             raise serializers.ValidationError('이메일 주소를 입력해주세요.')
-#         if password is None:
-#             raise serializers.ValidationError('비밀번호를 입력해주세요.')
-
-#         user = authenticate(email=email, password=password)
-
-#         if user is None:
-#             raise serializers.ValidationError('해당 이메일과 비밀번호를 가진 사용자를 찾을 수 없습니다.')
-#         if not user.is_active:
-#             raise serializers.ValidationError('이 사용자는 비활성화되었습니다.')
-
-#         token, _ = Token.objects.get_or_create(user=user)  # 사용자의 토큰 가져오기
-
-#         return {
-#             'user': user,
-#             'access_token': token.key,  # 토큰 값을 'access_token'으로 변경
-#         }
 
 
 
