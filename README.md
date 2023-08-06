@@ -4,3 +4,6 @@
 ### Frontend Repository
 - https://github.com/su0797/Ormi_Project_1
 
+
+### 프로젝트 목표
+
