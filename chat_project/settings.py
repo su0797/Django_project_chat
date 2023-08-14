@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'chatbot',
     'user',
+    'blog',
 ]
 
 AUTHENTICATION_BACKENDS = [
