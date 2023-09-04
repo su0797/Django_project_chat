@@ -8,7 +8,13 @@ User = get_user_model
 
 
 class List(APIView):
-    def get(self, request):
-        posts = Post.objects.order_by('created_at')
+    
+    def post(self, request):
+        posts = Post.objects.filter(is_active=True).order_by('-created_at')
+        
+        data = []
+        for post in posts:
+        post_info = {
 
+        }
     
