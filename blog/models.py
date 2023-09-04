@@ -13,7 +13,6 @@ class Post(models.Model):
     is_active = models.BooleanField(default=True)
 
 
-
 class Comment(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     content = models.TextField()
