@@ -12,8 +12,9 @@
 - 7월 26일 ~ 8월 3일
 
 ### 개발 환경
-- Django 4.2.3
-- Python 3.11.2
+- Django == 4.2.3
+- Python == 3.11.2
+- openai == 0.27.8
 - HTML, CSS, Javascript
 
 ### 프로젝트 구조
