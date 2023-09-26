@@ -8,9 +8,6 @@
 - 이 서비스를 이용하는 유저들이 함께 소통할 수 있는 커뮤니티의 역할을 합니다.
 ```
 
-### 협업 도구
-
-📜 Notion , 📱 Discord
 ### Frontend Repository
 - https://github.com/su0797/Ormi_Project_1
 
