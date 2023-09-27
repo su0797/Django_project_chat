@@ -5,7 +5,7 @@ from rest_framework import status
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
-from .models import Post
+from .models import Post, Comment
 from .serializers import PostSerializer
 from user.serializers import UserSerializer
 # Create your views here.
@@ -110,3 +110,31 @@ class View(APIView):
         }
 
         return Response(data, status=status.HTTP_200_OK)
+    
+
+class CommentWrite(APIView):
+    # permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        user = request.user
+        post = Post.objects.get(id=request.data['post_id'])
+        comment = Comment.objects.create(writer=user,content=request.data['content'],post=post,parent_comment=None)
+        
+        datas = {
+            "message": "댓글 생성 완료",
+        }
+        return Response(datas,status=status.HTTP_201_CREATED)
+    
+
+class CommentDelete(APIView):
+    # permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        comment = Comment.objects.get(id=request.data['comment_id'])
+        comment.is_active = False
+        comment.save()
+        
+        datas = {
+            "message": "댓글 삭제 완료",
+        }
+        return Response(datas,status=status.HTTP_200_OK)
