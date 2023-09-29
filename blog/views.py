@@ -15,7 +15,7 @@ User = get_user_model
 
 class List(APIView):
     
-    def post(self, request):
+    def get(self, request):
         posts = Post.objects.filter(is_active=True).order_by('-created_at')
         
         data = []
@@ -96,7 +96,7 @@ class Delete(APIView):
 
 class View(APIView):
     # 좋아요, 글 정보, 댓글과 대댓글 구분
-    def post(self, request, pk):
+    def get(self, request, pk):
         raw_post = Post.objects.get(id=pk)
         raw_post.save()
         
