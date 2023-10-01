@@ -82,6 +82,17 @@ class ProfileWrite(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
+class ProfileView(APIView):
+    def get(self, request, pk):
+        raw_user = User.objects.get(id=pk)
+        raw_user.save()
+
+        user_data = UserSerializer(raw_user).data
+        data = {
+            "user" : user_data
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    
 
 class ProfileUpdate(APIView):
     def get(self, request):
