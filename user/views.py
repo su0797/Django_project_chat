@@ -69,6 +69,27 @@ class Logout(APIView):
         return Response({"detail": "로그아웃되었습니다."}, status=status.HTTP_200_OK)
 
 
+class ChangePassword(APIView):
+    # permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        current_password = request.data.get("current_password")
+        new_password = request.data.get("new_password")
+
+        if not user.check_password(current_password):
+            return Response(
+                data={"message": "현재 비밀번호가 일치하지 않습니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user.set_password(new_password)
+        user.save()
+
+        response = {"message": "비밀번호 변경이 완료되었습니다."}
+        return Response(data=response, status=status.HTTP_200_OK)
+
+
 ### Profile
 class ProfileWrite(APIView):
     def post(self, request):
