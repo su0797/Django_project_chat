@@ -12,5 +12,5 @@ urlpatterns = [
     path('view/<int:pk>/', views.View.as_view(), name='view'),
     path('comment/write/', views.CommentWrite.as_view(), name='cm-write'),
     path('comment/delete/', views.CommentDelete.as_view(), name='cm-delete'),
-    # 대댓글 기능 추가하기
+    path('re-comment/write/', views.ReCommentWrite.as_view(), name='re-cm-write')
 ]

@@ -12,7 +12,7 @@ from user.serializers import UserSerializer
 
 User = get_user_model
 
-
+### Post
 class List(APIView):
     
     def get(self, request):
@@ -112,6 +112,7 @@ class View(APIView):
         return Response(data, status=status.HTTP_200_OK)
     
 
+### Comment
 class CommentWrite(APIView):
     # permission_classes = [IsAuthenticated]
     
@@ -138,3 +139,23 @@ class CommentDelete(APIView):
             "message": "댓글 삭제 완료",
         }
         return Response(datas,status=status.HTTP_200_OK)
+    
+
+class ReCommentWrite(APIView):
+    # permission_classes = [IsAuthenticated]
+    def post(self, request):
+        user = request.user
+        try:
+            post = Post.objects.get(id=request.data['post_id'])
+        except:
+            datas = {
+                "message" : "해당 게시물을 찾을 수 없습니다."
+            }
+            return Response(datas, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            parent_comment = Comment.objects.get(id=request.data['comment_id'])
+            comment = Comment.objects.create(writer=user, content=request.data['content'], post=post, parent_comment=parent_comment)
+            datas = {
+                "message" : "대댓글 작성을 완료했습니다."
+            }
+            return Response(datas, status=status.HTTP_201_CREATED)
