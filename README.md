@@ -66,18 +66,18 @@
 |프로필 수정|user/profile/update/||
 |비밀번호 변경|user/profile/change-password/||
 |회원탈퇴|user/profile/delete/||
-|Post|||
-|목록|post/||
-|글쓰기|post/write/||
-|수정|post/edit/<int:pk>/||
-|삭제|post/delete/<int:pk>/||
-|뷰|post/view/<int:pk>/||
+|Blog|||
+|목록|blog/||
+|글쓰기|blog/write/||
+|수정|blog/edit/||
+|삭제|blog/delete/||
+|뷰|blog/view/||
 |Search|||
-|검색|post/search/||
+|검색|blog/search/||
 |Comment|||
-|쓰기|post/comment/write/||
-|삭제|post/comment/delete/||
-|대댓글 쓰기|post/re-comment/write/||
+|쓰기|blog/comment/write/||
+|삭제|blog/comment/delete/||
+|대댓글 쓰기|blog/re-comment/write/||
 
 
 ### 3.4. 프로젝트 설계 및 프로세스
