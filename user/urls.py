@@ -10,7 +10,6 @@ urlpatterns = [
     path('login/', views.Login.as_view(), name='login'),
     path('logout/', views.Logout.as_view(), name='logout'),
     path('list/', views.UserList.as_view(), name='user-list'),
-    # path('api-auth/', include('rest_framework.urls')),
     path('profile/<int:pk>/', views.MyProfile.as_view(), name='view-profile'),
 	# path('profile/write/', views.ProfileWrite.as_view(), name='wr-profile'),
 	path('profile/update/', views.ProfileUpdate.as_view(), name='up-profile'),
