@@ -59,6 +59,25 @@
 ### 3.3. URL 설계
 |이름|URL|비고|
 |------|---|---|
+|User|||
+|로그인|user/login/||
+|회원가입|user/join/||
+|프로필|user/profile/||
+|프로필 수정|user/profile/update/||
+|비밀번호 변경|user/profile/change-password/||
+|회원탈퇴|user/profile/delete/||
+|Post|||
+|목록|post/||
+|글쓰기|post/write/||
+|수정|post/edit/<int:pk>/||
+|삭제|post/delete/<int:pk>/||
+|뷰|post/view/<int:pk>/||
+|Search|||
+|검색|post/search/||
+|Comment|||
+|쓰기|post/comment/write/||
+|삭제|post/comment/delete/||
+|대댓글 쓰기|post/re-comment/write/||
 
 
 ### 3.4. 프로젝트 설계 및 프로세스
