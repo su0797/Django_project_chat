@@ -159,3 +159,62 @@ class ReCommentWrite(APIView):
                 "message" : "대댓글 작성을 완료했습니다."
             }
             return Response(datas, status=status.HTTP_201_CREATED)
+        
+
+### Search
+class Search(APIView):
+    def post(self, request):
+        query = request.data.get('query') 
+        
+        if query is None:
+            return Response({"error": "Missing 'query' parameter"}, status=400)
+
+        profiles = Profile.objects.filter(Q(nickname__icontains=query) | Q(about__icontains=query),is_active=True)
+        
+        new_profiles = []
+        
+        for pf in profiles:
+            pf_serializer = UserSerializer(pf.user).data
+            new_profiles.append(pf_serializer)
+            
+        posts = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query),is_active=True).order_by('-created_at')
+        post_serializers = PostSerializer(posts, many=True).data
+        
+        studies = Study.objects.filter(Q(title__icontains=query) | Q(description__icontains=query),is_active=True).order_by('-created_at')
+        study_serializer = StudySerializer(studies, many=True).data
+        
+        new_postlist = []
+        
+        for p_s in post_serializers:
+            
+            writer = User.objects.get(id=p_s['writer'])
+            writer_info = UserSerializer(writer).data
+            
+            post_imgs = Post.objects.get(id=p_s['id'])
+            images = post_imgs.image.all()  # 이미지들 가져오기
+            p_s["images"]= [{"image": image.image.url} for image in images]
+            
+            info = {
+                'post': p_s,
+                'writer': writer_info
+            }
+            new_postlist.append(info)
+        
+        new_studies = []
+        
+        for s_s in study_serializer:
+            leader = User.objects.get(id=s_s['leader'])
+            leader_info = UserSerializer(leader).data
+            info = {
+                'study': s_s,
+                'leader': leader_info
+            }
+            new_studies.append(info)
+        
+        response_data = {
+            "profiles": new_profiles,
+            "posts": new_postlist,
+            "studies": new_studies
+        }
+        
+        return Response(response_data)
