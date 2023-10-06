@@ -32,7 +32,6 @@
 
 - Django == 4.2.3
 - Python == 3.11.2
-- openai == 0.27.8
 - HTML, CSS, Javascript
 
 ### 2.2. 배포 환경
