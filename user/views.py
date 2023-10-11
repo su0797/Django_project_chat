@@ -91,17 +91,17 @@ class ChangePassword(APIView):
         return Response(data=response, status=status.HTTP_200_OK)
 
 
-class Delete(APIView):
-    permission_classes = [IsAuthenticated]
+# class Delete(APIView):
+#     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        user = request.user
-        refresh_token = RefreshToken.for_user(user)
-        refresh_token.blacklist()
-        user.delete()
+#     def post(self, request):
+#         user = request.user
+#         refresh_token = RefreshToken.for_user(user)
+#         refresh_token.blacklist()
+#         user.delete()
 
-        response = {"message": "회원탈퇴 완료"}
-        return Response(data=response, status=status.HTTP_200_OK)
+#         response = {"message": "회원탈퇴 완료"}
+#         return Response(data=response, status=status.HTTP_200_OK)
 
 ### Profile
 class ProfileWrite(APIView):
