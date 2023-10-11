@@ -10,6 +10,7 @@ from .models import User, Profile
 from .serializers import UserLoginSerializer, UserJoinSerializer, ProfileSerializer, UserSerializer
 from .renderers import UserJSONRenderer
 from rest_framework.permissions import IsAuthenticated
+# from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 # Create your views here.
 
@@ -89,6 +90,18 @@ class ChangePassword(APIView):
         response = {"message": "비밀번호 변경이 완료되었습니다."}
         return Response(data=response, status=status.HTTP_200_OK)
 
+
+class Delete(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        refresh_token = RefreshToken.for_user(user)
+        refresh_token.blacklist()
+        user.delete()
+
+        response = {"message": "회원탈퇴 완료"}
+        return Response(data=response, status=status.HTTP_200_OK)
 
 ### Profile
 class ProfileWrite(APIView):
